@@ -1,0 +1,2 @@
+Empresa busca desarrollador backend
+con experiencia en PHP, Laravel, MySQL y Docker. Se valora conocimiento de AWS y metodologias agiles.
