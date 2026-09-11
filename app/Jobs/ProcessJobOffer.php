@@ -5,6 +5,8 @@ namespace App\Jobs;
 
 use App\DTOs\JobAnalysisResult;
 use App\Models\JobOffer;
+use App\Services\CvPdfGenerator;
+
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 
@@ -48,7 +50,7 @@ class ProcessJobOffer implements ShouldQueue
             ]);
 
             if ($this->offer->fresh()->isHighFit()) {
-                // TODO: generar PDF
+                app(CvPdfGenerator::class)->generateForOffer($this->offer->fresh());
             }
 
         }
