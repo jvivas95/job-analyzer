@@ -5,6 +5,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Override;
 
 class JobOffer extends Model
@@ -23,6 +24,7 @@ class JobOffer extends Model
         'cover_letter_pdf_path',
         'status',
         'failure_reason',
+        'user_id'
     ];
     #[Override]
     protected function casts(): array
@@ -47,5 +49,10 @@ class JobOffer extends Model
     public function scopeHighFit(Builder $query, int $threshold = 80): Builder
     {
         return $query->where('fit_score', '>=', $threshold);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
