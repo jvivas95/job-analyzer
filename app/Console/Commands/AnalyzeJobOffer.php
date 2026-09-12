@@ -5,8 +5,8 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
-use App\Jobs\ProcessJobOffer;
-use App\Models\JobOffer;
+use App\Services\JobOfferIntake;
+use App\Models\User;
 
 class AnalyzeJobOffer extends Command
 {
@@ -29,19 +29,22 @@ class AnalyzeJobOffer extends Command
             return self::FAILURE;
         }
 
-        $offer = JobOffer::create([
-            'title' => $this->option('title'),
-            'company'     => $this->option('company'),
-            'description' => $description,
-            'url'         => $this->option('url'),
-            'status'      => 'pending',
-        ]);
-
-        ProcessJobOffer::dispatch($offer);
+        $offer = app(JobOfferIntake::class)->handle(
+            userId: $this->resolveUserId(),
+            description: $description,
+            url: $this->option('url'),
+            company: $this->option('company'),
+            title: $this->option('title'),
+        );
 
         $this->info("Oferta #{$offer->id} encolada correctamente. Ejecuta 'php artisan queue:work' para procesarla.");
 
         return self::SUCCESS;
+    }
+
+    private function resolveUserId(): int
+    {
+        return User::where('email', config('app.owner_email'))->firstOrFail()->id;
     }
 
     private function resolveDescription(): ?string
