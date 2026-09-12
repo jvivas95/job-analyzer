@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleAuthController;
 
-Route::view('/dashboard', 'welcome');
+Route::redirect('/', 'dashboard');
 
 Route::get('/auth/google', [GoogleAuthController::class, 'redirectGoogle'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callbackGoogle'])->name('google.callback');
@@ -11,11 +11,10 @@ Route::get('/auth/google/callback', [GoogleAuthController::class, 'callbackGoogl
 Route::middleware(['auth'])->group(function(){
 
     Route::view('dashboard', 'dashboard')
-        ->middleware(['auth', 'verified'])
+        ->middleware(['verified'])
         ->name('dashboard');
 
     Route::view('profile', 'profile')
-        ->middleware(['auth'])
         ->name('profile');
 
 });
