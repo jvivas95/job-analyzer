@@ -43,6 +43,7 @@ class JobAnalyzerService
                     ['role' => 'system', 'content' => $this->systemPrompt()],
                     ['role' => 'user', 'content' => $this->userPrompt($offer)],
                 ],
+                'temperature' => 0.3,
             ]);
 
         if ($response->failed()) {
