@@ -7,12 +7,14 @@
         <ul class="space-y-2">
             @foreach($offers as $offer)
                 <li class="border p-3 rounded">
-                    <strong>{{ $offer->company ?? 'Sin empresa' }}</strong> — {{ $offer->title ?? 'Sin título' }}
-                    <br>
-                    Estado: {{ $offer->status }}
-                    @if($offer->fit_score !== null)
-                        · Fit: {{ $offer->fit_score }}%
-                    @endif
+                    <a href="{{ route('offers.show', $offer)}}">
+                        <strong>{{ $offer->company ?? 'Sin empresa' }}</strong> — {{ $offer->title ?? 'Sin título' }}
+                        <br>
+                        Estado: {{ $offer->status }}
+                        @if($offer->fit_score !== null)
+                            · Fit: {{ $offer->fit_score }}%
+                        @endif
+                    </a>
                 </li>
             @endforeach
         </ul>

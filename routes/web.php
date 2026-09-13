@@ -5,6 +5,11 @@ use App\Http\Controllers\Auth\GoogleAuthController;
 
 use App\Livewire\OfferIndex;
 use App\Livewire\OfferCreate;
+use App\Livewire\OfferShow;
+
+use App\Http\Controllers\JobOfferPdfController;
+
+
 
 Route::redirect('/', 'dashboard');
 
@@ -22,6 +27,9 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('/offers', OfferIndex::class)->name('offers.index');
     Route::get('/offers/create', OfferCreate::class)->name('offers.create');
+
+    Route::get('/offers/{offer}', OfferShow::class)->name('offers.show');
+    Route::get('/offers/{offer}/download/{type}', [JobOfferPdfController::class, 'download'])->name('offers.download');
 
 });
 
