@@ -91,7 +91,7 @@
             <div class="entry">
                 <div class="clearfix">
                     <span class="entry-left">
-                        {{ $project['name'] }}{{ !empty($project['url']) ? ' — '.$project['url'] : '' }}
+                        {{ $project['name'] }}{{ !empty($project['url']) ? ' — '.$project['url'] : (!empty($project['repo']) ? ' — '.$project['repo'] : '') }}
                     </span>
                 </div>
                 @if(!empty($project['stack']))

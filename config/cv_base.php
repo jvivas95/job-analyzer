@@ -84,19 +84,21 @@ return [
             'description' => 'Plataforma de reseñas de libros y comunidad literaria, desplegada en producción '
                 . 'con Docker y MySQL gestionado en Aiven (cloud). Demuestra dominio completo del stack PHP moderno.',
         ],
-        [
-            'name'        => 'Mail Router (Python)',
-            'url'         => null,
-            'stack'       => ['Python', 'Flask', 'IMAP', 'SMTP', 'SQLite'],
-            'description' => 'App para gestionar el enrutamiento de correos electrónicos según reglas de '
-                . 'negocio, con niveles de usuario, panel de administración y actualización en tiempo real.',
-        ],
+        // [
+        //     'name'        => 'Mail Router (Python)',
+        //     'url'         => null,
+        //     'stack'       => ['Python', 'Flask', 'IMAP', 'SMTP', 'SQLite'],
+        //     'description' => 'App para gestionar el enrutamiento de correos electrónicos según reglas de '
+        //         . 'negocio, con niveles de usuario, panel de administración y actualización en tiempo real.',
+        // ],
         [
             'name'        => 'Mail Router (Laravel)',
             'url'         => null,
+            'repo'        => 'https://github.com/jvivas95/mailrouter',
             'stack'       => ['Laravel', 'PHP', 'MySQL', 'IMAP', 'SMTP'],
-            'description' => 'Reimplementación de Mail Router en Laravel. En desarrollo, todavía no '
-                . 'publicada en portfolio ni GitHub.',
+            'description' => 'App para gestionar el enrutamiento de correos electrónicos según las reglas del'
+                . 'negocia, con niveles de usuario, panel de administración y actualización en tiempo real.'
+                . 'desplegada en AWS para el departamento comercial de una empresa.',
         ],
     ],
 
@@ -107,6 +109,7 @@ return [
         'testing'    => ['Pest (PHP)', 'pruebas unitarias y de funcionalidad'],
         'devops'     => ['Docker', 'Render', 'Vercel', 'InfinityFree', 'Linux CLI', 'FTP/SFTP', 'AWS (iniciación)'],
         'tools'      => ['Git', 'GitHub', 'Google Books API'],
+        'methodologies' => ['Scrum', 'Metodologías ágiles'],
     ],
 
     'soft_skills' => [
