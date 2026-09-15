@@ -22,23 +22,23 @@ class CvPdfGenerator
         $cvPath = "cv/{$offer->id}-{$slug}-cv.pdf";
         $letterPath= "cv/{$offer->id}-{$slug}-carta.pdf";
 
-        Storage::disk('local')->makeDirectory('cv');
+        $cvPdf = Pdf::loadView("pdf.cv", ['data' => $offer->adapted_cv_data])->output();
 
-        Pdf::loadView("pdf.cv", ['data' => $offer->adapted_cv_data])
-            ->save(Storage::disk('local')->path($cvPath));
+        Storage::disk('s3')->put($cvPath, $cvPdf);
 
-        if (!File::exists(Storage::disk('local')->path($cvPath))) {
+        if (!Storage::disk('s3')->exists($cvPath)) {
             throw new RuntimeException("No se pudo generar el PDF del CV para la oferta #{$offer->id}.");
         }
 
-        Pdf::loadView("pdf.cover-letter", [
+        $letterPdf = Pdf::loadView("pdf.cover-letter", [
             'coverLetter' => $offer->cover_letter,
             'contact' => $offer->adapted_cv_data['contact'] ?? [],
             'company' => $offer->company,
-            ])
-            ->save(Storage::disk('local')->path($letterPath));
+            ])->output();
 
-        if (!File::exists(Storage::disk('local')->path($letterPath))) {
+        Storage::disk('s3')->put($letterPath, $letterPdf);
+
+        if (!File::exists(Storage::disk('s3')->path($letterPath))) {
             throw new RuntimeException("No se pudo generar el PDF de la carta para la oferta #{$offer->id}.");
         }
 

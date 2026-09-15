@@ -23,6 +23,6 @@ class JobOfferPdfController extends Controller
 
         abort_if(blank($path), 404);
 
-        return Storage::disk('local')->download($path);
+        return Storage::disk('s3')->download($path);
     }
 }
