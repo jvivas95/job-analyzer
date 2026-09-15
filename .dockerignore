@@ -1,0 +1,11 @@
+/vendor
+/node_modules
+/.git
+/.env
+/.env.example
+/storage/logs/*
+/storage/app/private/*
+/tests
+.dockerignore
+Dockerfile
+docker-compose.yml
