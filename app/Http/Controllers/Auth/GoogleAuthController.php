@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +30,10 @@ class GoogleAuthController extends Controller
                 'password' => null,
             ]
         );
+
+        if ($user->wasRecentlyCreated){
+            Profile::create(['user_id' => $user->id]);
+        }
 
         Auth::login($user);
 

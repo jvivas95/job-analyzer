@@ -8,6 +8,8 @@ use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
+use App\Models\Profile;
+
 new #[Layout('layouts.guest')] class extends Component
 {
     public string $name = '';
@@ -29,6 +31,8 @@ new #[Layout('layouts.guest')] class extends Component
         $validated['password'] = Hash::make($validated['password']);
 
         event(new Registered($user = User::create($validated)));
+
+        Profile::create(['user_id' => $user->id]);
 
         Auth::login($user);
 
