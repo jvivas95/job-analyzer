@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Livewire\OfferIndex;
 use App\Livewire\OfferCreate;
 use App\Livewire\OfferShow;
+use App\Livewire\ProfileEdit;
 
 use App\Http\Controllers\JobOfferPdfController;
 
@@ -30,6 +31,8 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('/offers/{offer}', OfferShow::class)->name('offers.show');
     Route::get('/offers/{offer}/download/{type}', [JobOfferPdfController::class, 'download'])->name('offers.download');
+
+    Route::get('/profile-edit', ProfileEdit::class)->name('profile.edit');
 
 });
 

@@ -36,6 +36,9 @@ new class extends Component
                     <x-nav-link :href="route('offers.create')" :active="request()->routeIs('offers.create')" class="text-[#dfeae7] hover:text-[#edf8f4]">
                         {{ __('Nueva oferta') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('offers.create')" class="text-[#dfeae7] hover:text-[#edf8f4]">
+                        {{ __('Perfil') }}
+                    </x-nav-link>
                 </div>
             </div>
 
