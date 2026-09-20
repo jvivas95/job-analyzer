@@ -22,10 +22,10 @@ class Profile extends Model
         'website',
         'secondary_url',
         'summary',
-        'experience_text',
-        'projects_text',
+        'experience',
+        'projects',
         'skills',
-        'education_text',
+        'education',
         'soft_skills',
         'languages',
     ];
@@ -35,6 +35,10 @@ class Profile extends Model
     {
         return[
             'skills' => 'array',
+            'experience' => 'array',
+            'projects' => 'array',
+            'education' => 'array',
+            'soft_skills' => 'array'
         ];
     }
 
