@@ -29,8 +29,9 @@ class ProfileEdit extends Component
 
     public ?string $projects_text = null;
 
-    #[Validate('required|string')]
-    public string $skills = '';
+    #[Validate('required')]
+    public array $skills = [];
+    public string $newSkill = '';
     public string $education_text = '';
     public ?string $soft_skills = null;
     public string $languages = '';
@@ -50,7 +51,7 @@ class ProfileEdit extends Component
         $this->summary = $profile->summary ?? '';
         $this->experience_text = $profile->experience_text ?? '';
         $this->projects_text = $profile->projects_text ?? '';
-        $this->skills = $profile->skills ? implode(', ', $profile->skills) : '';
+        $this->skills = $profile->skills ?? [];
         $this->education_text = $profile->education_text ?? '';
         $this->soft_skills = $profile->soft_skills ?? '';
         $this->languages = $profile->languages ?? '';
@@ -60,25 +61,45 @@ class ProfileEdit extends Component
     {
         $this->validate();
 
-        Auth::user()->profile->update([
-            'full_name'       => $this->full_name,
-            'title'           => $this->title,
-            'location'        => $this->location,
-            'email'           => $this->email,
-            'phone'           => $this->phone,
-            'linkedin'        => $this->linkedin,
-            'website'         => $this->website,
-            'secondary_url'   => $this->secondary_url,
-            'summary'         => $this->summary,
-            'experience_text' => $this->experience_text,
-            'projects_text'   => $this->projects_text,
-            'skills'          => array_map('trim', explode(',', $this->skills)),
-            'education_text'  => $this->education_text,
-            'soft_skills'     => $this->soft_skills,
-            'languages'       => $this->languages,
-        ]);
+        Auth::user()->profile()->updateOrCreate(
+            ['user_id' => Auth::id()], // Condición de búsqueda
+            [
+                'full_name'       => $this->full_name,
+                'title'           => $this->title,
+                'location'        => $this->location,
+                'email'           => $this->email,
+                'phone'           => $this->phone,
+                'linkedin'        => $this->linkedin,
+                'website'         => $this->website,
+                'secondary_url'   => $this->secondary_url,
+                'summary'         => $this->summary,
+                'experience_text' => $this->experience_text,
+                'projects_text'   => $this->projects_text,
+                'skills'          => $this->skills,
+                'education_text'  => $this->education_text,
+                'soft_skills'     => $this->soft_skills,
+                'languages'       => $this->languages,
+            ]
+        );
 
         session()->flash('success', 'Perfil actualizado correctamente');
+    }
+
+    public function addSkill(): void
+    {
+        $trimed = trim($this->newSkill);
+
+        if ($trimed !== '' && !in_array($trimed, $this->skills, true)) {
+            $this->skills[] = $trimed;
+        }
+
+        $this->newSkill = '';
+    }
+
+    public function removeSkill(int $index): void
+    {
+        unset($this->skills[$index]);
+        $this->skills = array_values($this->skills);
     }
 
 }

@@ -73,9 +73,26 @@
                     </div>
 
                     <div>
-                        <x-input-label for="skills" value="Habilidades técnicas (separadas por comas)" />
-                        <textarea wire:model="skills" id="skills" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
-                        <x-input-error :messages="$errors->get('skills')" class="mt-2" />
+                        <x-input-label value="Habilidades técnicas" />
+
+                        <div class="flex flex-wrap gap-2 mb-2">
+                            @foreach($skills as $index => $skill)
+                                <span class="inline-flex items-center gap-1 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">
+                                    {{ $skill }}
+                                    <button type="button" wire:click="removeSkill({{ $index }})" class="text-indigo-500 hover:text-indigo-900">
+                                        &times;
+                                    </button>
+                                </span>
+                            @endforeach
+                        </div>
+
+                        <input
+                            type="text"
+                            wire:model="newSkill"
+                            wire:keydown.enter.prevent="addSkill"
+                            placeholder="Escribe una habilidad y pulsa Enter"
+                            class="border-gray-300 rounded-md shadow-sm w-full"
+                        >
                     </div>
 
                     <div>
