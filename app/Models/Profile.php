@@ -38,7 +38,8 @@ class Profile extends Model
             'experience' => 'array',
             'projects' => 'array',
             'education' => 'array',
-            'soft_skills' => 'array'
+            'soft_skills' => 'array',
+            'languages' => 'array'
         ];
     }
 
