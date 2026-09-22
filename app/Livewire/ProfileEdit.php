@@ -24,7 +24,7 @@ class ProfileEdit extends Component
     #[Validate('required|string|min:50')]
     public string $summary = '';
 
-    #[Validate('required|min:50')]
+    #[Validate('required|array')]
     public array $experience = [];
 
     public ?array $projects = [];
@@ -33,7 +33,7 @@ class ProfileEdit extends Component
     public array $skills = [];
     public string $newSkill = '';
     public array $education = [];
-    public ?array $soft_skills = [];
+    public array $soft_skills = [];
     public array $languages = [];
 
     public function mount(): void
@@ -50,12 +50,12 @@ class ProfileEdit extends Component
         $this->website = $profile->website ?? '';
         $this->secondary_url = $profile->secondary_url ?? '';
         $this->summary = $profile->summary ?? '';
-        $this->experience = $profile->experience ?? [];
-        $this->projects = $profile->projects ?? [];
-        $this->skills = $profile->skills ?? [];
-        $this->education = $profile->education ?? [];
-        $this->soft_skills = $profile->soft_skills ?? [];
-        $this->languages = $profile->languages ?? [];
+        $this->experience = (array) ($profile->experience ?? []);
+        $this->projects = (array) ($profile->projects ?? []);
+        $this->skills = (array) ($profile->skills ?? []);
+        $this->education = (array) ($profile->education ?? []);
+        $this->soft_skills = (array) ($profile?->soft_skills ?? []);
+        $this->languages = (array) ($profile->languages ?? []);
 
         if(empty($this->experience)){
             $this->addExperience();
@@ -69,7 +69,6 @@ class ProfileEdit extends Component
         Auth::user()->profile()->updateOrCreate(
             ['user_id' => Auth::id()], // Condición de búsqueda
             [
-                'full_name'       => $this->full_name,
                 'title'           => $this->title,
                 'location'        => $this->location,
                 'email'           => $this->email,
@@ -116,7 +115,12 @@ class ProfileEdit extends Component
             'end_date' => '',
             'description' => '',
         ];
+    }
 
+    public function removeExperience(int $index): void
+    {
+        unset($this->experience[$index]);
+        $this->experience = array_values($this->experience);
     }
 
 }

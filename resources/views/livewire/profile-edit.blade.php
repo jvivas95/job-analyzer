@@ -161,6 +161,18 @@
                                                 @endif
                                             </div>
                                         </div>
+
+                                        <!-- Descripción -->
+                                        <div>
+                                            <x-input-label for="description-{{ $index }}" value="Descripción" />
+                                            <x-text-input
+                                                id="description-{{ $index }}"
+                                                type="textarea"
+                                                wire:model="experience.{{ $index }}.description"
+                                                class="mt-1 block w-full"
+                                            />
+                                            <x-input-error :messages="$errors->get('experience.' . $index . '.description')" class="mt-1" />
+                                        </div>
                                     </div>
 
                                     <!-- Botón de eliminar este registro específico -->
@@ -210,10 +222,10 @@
                         <textarea wire:model="education_text" id="education_text" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
                     </div>
 
-                    <div>
+                    {{-- <div>
                         <x-input-label for="soft_skills" value="Habilidades personales (opcional)" />
                         <x-text-input wire:model="soft_skills" id="soft_skills" type="text" class="mt-1 block w-full" />
-                    </div>
+                    </div> --}}
 
                     <div>
                         <x-input-label for="languages" value="Idiomas" />
