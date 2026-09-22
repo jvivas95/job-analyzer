@@ -44,7 +44,7 @@ class ProfileEdit extends Component
         $this->name = $user->name ?? '';
         $this->title = $profile->title ?? '';
         $this->location = $profile->location ?? '';
-        $this->email = $profile->email ?? '';
+        $this->email = $user->email ?? '';
         $this->phone = $profile->phone ?? '';
         $this->linkedin = $profile->linkedin ?? '';
         $this->website = $profile->website ?? '';

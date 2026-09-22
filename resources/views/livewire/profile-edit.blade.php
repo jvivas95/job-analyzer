@@ -36,7 +36,13 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <x-input-label for="email" value="Email de contacto" />
-                            <x-text-input wire:model="email" id="email" type="text" class="mt-1 block w-full" />
+                            <x-text-input
+                                wire:model="email"
+                                id="email"
+                                type="text"
+                                readonly
+                                class="mt-1 block w-full"
+                            />
                         </div>
                         <div>
                             <x-input-label for="phone" value="Teléfono" />
