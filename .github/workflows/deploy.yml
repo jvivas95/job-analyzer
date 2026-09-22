@@ -19,9 +19,25 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /var/www/job-analyzer
+
+            # 1. Ajustar permisos de usuario si es necesario
+            sudo chown -R $USER:$USER /var/www/job-analyzer
+
+            # 2. Descargar los últimos cambios
             git pull origin main
+
+            # 3. Instalar/actualizar dependencias de Composer
+            docker compose exec -T app composer install --no-dev --optimize-autoloader
+
+            # 4. Limpiar cachés antiguas de Laravel
+            docker compose exec -T app php artisan optimize:clear
+
+            # 5. Aplicar migraciones de base de datos
+            docker compose exec -T app php artisan migrate --force
+
+            # 6. Re-generar cachés de producción
             docker compose exec -T app php artisan config:cache
             docker compose exec -T app php artisan route:cache
             docker compose exec -T app php artisan view:cache
-            docker compose exec -T app php artisan migrate --force
-            echo "✅ Deploy completado"
+
+            echo "✅ Deploy completado con éxito"
