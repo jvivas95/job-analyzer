@@ -139,4 +139,20 @@ class ProfileEdit extends Component
         $this->projects = array_values($this->projects);
     }
 
+    public function addEducation(): void
+    {
+        $this->education [] = [
+            'degree' => '',
+            'institution' => '',
+            'start_date' => '',
+            'end_date' => '',
+        ];
+    }
+
+    public function removeEducation(int $index): void
+    {
+        unset($this->education[$index]);
+        $this->education = array_values($this->education);
+    }
+
 }
