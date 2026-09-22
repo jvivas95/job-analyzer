@@ -11,7 +11,7 @@ use Livewire\Attributes\Layout;
 class ProfileEdit extends Component
 {
     #[Validate('required|string|max:255')]
-    public string $full_name = '';
+    public string $name = '';
 
     public string $title = '';
     public string $location = '';
@@ -38,9 +38,10 @@ class ProfileEdit extends Component
 
     public function mount(): void
     {
+        $user = Auth::user();
         $profile = Auth::user()->profile;
 
-        $this->full_name = $profile->full_name ?? '';
+        $this->name = $user->name ?? '';
         $this->title = $profile->title ?? '';
         $this->location = $profile->location ?? '';
         $this->email = $profile->email ?? '';
@@ -55,6 +56,10 @@ class ProfileEdit extends Component
         $this->education = $profile->education ?? [];
         $this->soft_skills = $profile->soft_skills ?? [];
         $this->languages = $profile->languages ?? [];
+
+        if(empty($this->experience)){
+            $this->addExperience();
+        }
     }
 
     public function save(): void
@@ -100,6 +105,18 @@ class ProfileEdit extends Component
     {
         unset($this->skills[$index]);
         $this->skills = array_values($this->skills);
+    }
+
+    public function addExperience(): void
+    {
+        $this->experience [] = [
+            'role' => '',
+            'company' => '',
+            'start_date' => '',
+            'end_date' => '',
+            'description' => '',
+        ];
+
     }
 
 }

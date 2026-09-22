@@ -13,9 +13,14 @@
                 <form wire:submit="save" class="space-y-6 bg-white p-6 rounded-lg shadow">
 
                     <div>
-                        <x-input-label for="full_name" value="Nombre completo" />
-                        <x-text-input wire:model="full_name" id="full_name" type="text" class="mt-1 block w-full" />
-                        <x-input-error :messages="$errors->get('full_name')" class="mt-2" />
+                        <x-input-label for="name" value="Nombre completo" />
+                        <x-text-input
+                            wire:model="name"
+                            id="name"
+                            type="text"
+                            readonly
+                            class="mt-1 block w-full" />
+                        <x-input-error :messages="$errors->get('name')" class="mt-2" />
                     </div>
 
                     <div>
@@ -61,10 +66,115 @@
                         <x-input-error :messages="$errors->get('summary')" class="mt-2" />
                     </div>
 
-                    <div>
-                        <x-input-label for="experience_text" value="Experiencia laboral" />
-                        <textarea wire:model="experience_text" id="experience_text" rows="8" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
-                        <x-input-error :messages="$errors->get('experience_text')" class="mt-2" />
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">
+                                Experiencia Laboral
+                            </h3>
+
+                            <!-- Botón para añadir un nuevo bloque de experiencia -->
+                            <x-secondary-button type="button" wire:click="addExperience">
+                                + Añadir experiencia
+                            </x-secondary-button>
+                        </div>
+
+                        <!-- Si no hay nada en la experiencia (control con @ if por seguridad) -->
+                        @if (empty($experience))
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                No has añadido ninguna experiencia laboral todavía.
+                            </p>
+                        @else
+                            <!-- Recorremos los datos (vengan de la BD o sean nuevos) -->
+                            @foreach ($experience as $index => $item)
+                                <div wire:key="experience-item-{{ $index }}" class="p-4 mb-4 border rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 relative">
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <!-- Nombre del puesto -->
+                                        <div>
+                                            <x-input-label for="role-{{ $index }}" value="Nombre del puesto" />
+                                            <x-text-input
+                                                id="role-{{ $index }}"
+                                                type="text"
+                                                wire:model="experience.{{ $index }}.role"
+                                                class="mt-1 block w-full"
+                                                placeholder="Ej. Desarrollador Web"
+                                            />
+                                            <x-input-error :messages="$errors->get('experience.' . $index . '.role')" class="mt-1" />
+                                        </div>
+
+                                        <!-- Empresa -->
+                                        <div>
+                                            <x-input-label for="company-{{ $index }}" value="Empresa" />
+                                            <x-text-input
+                                                id="company-{{ $index }}"
+                                                type="text"
+                                                wire:model="experience.{{ $index }}.company"
+                                                class="mt-1 block w-full"
+                                                placeholder="Ej. Mi Empresa S.L."
+                                            />
+                                            <x-input-error :messages="$errors->get('experience.' . $index . '.company')" class="mt-1" />
+                                        </div>
+
+                                        <!-- Period -->
+                                        <div class="mt-3 flex items-center">
+                                            <input
+                                                id="is_current-{{ $index }}"
+                                                type="checkbox"
+                                                wire:model.live="experience.{{ $index }}.is_current"
+                                                class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                                            >
+                                            <x-input-label for="is_current-{{ $index }}" value="Trabajo actualmente aquí" class="ml-2" />
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                                            <!-- Fecha de Inicio -->
+                                            <div>
+                                                <x-input-label for="start_date-{{ $index }}" value="Fecha de inicio" />
+                                                <x-text-input
+                                                    id="start_date-{{ $index }}"
+                                                    type="date"
+                                                    wire:model="experience.{{ $index }}.start_date"
+                                                    class="mt-1 block w-full"
+                                                />
+                                                <x-input-error :messages="$errors->get('experience.' . $index . '.start_date')" class="mt-1" />
+                                            </div>
+
+                                            <!-- Fecha de Fin (Se oculta si is_current es true) -->
+                                            <div>
+                                                @if (empty($item['is_current']))
+                                                    <x-input-label for="end_date-{{ $index }}" value="Fecha de fin" />
+                                                    <x-text-input
+                                                        id="end_date-{{ $index }}"
+                                                        type="date"
+                                                        wire:model="experience.{{ $index }}.end_date"
+                                                        class="mt-1 block w-full"
+                                                    />
+                                                    <x-input-error :messages="$errors->get('experience.' . $index . '.end_date')" class="mt-1" />
+                                                @else
+                                                    <!-- Opcional: Un mensaje o campo deshabilitado indicando 'Actualidad' -->
+                                                    <x-input-label value="Fecha de fin" />
+                                                    <x-text-input
+                                                        type="text"
+                                                        value="Actualmente"
+                                                        disabled
+                                                        class="mt-1 block w-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                                                    />
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Botón de eliminar este registro específico -->
+                                    <div class="mt-3 text-right">
+                                        <x-danger-button type="button" wire:click="removeExperience({{ $index }})">
+                                            Eliminar
+                                        </x-danger-button>
+                                    </div>
+
+                                </div>
+                            @endforeach
+                        @endif
+
+                        <x-input-error :messages="$errors->get('experience')" class="mt-2" />
                     </div>
 
                     <div>
