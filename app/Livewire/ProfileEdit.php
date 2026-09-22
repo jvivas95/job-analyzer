@@ -24,17 +24,17 @@ class ProfileEdit extends Component
     #[Validate('required|string|min:50')]
     public string $summary = '';
 
-    #[Validate('required|string|min:50')]
-    public string $experience_text = '';
+    #[Validate('required|min:50')]
+    public array $experience = [];
 
-    public ?string $projects_text = null;
+    public ?array $projects = [];
 
     #[Validate('required')]
     public array $skills = [];
     public string $newSkill = '';
-    public string $education_text = '';
-    public ?string $soft_skills = null;
-    public string $languages = '';
+    public array $education = [];
+    public ?array $soft_skills = [];
+    public array $languages = [];
 
     public function mount(): void
     {
@@ -49,12 +49,12 @@ class ProfileEdit extends Component
         $this->website = $profile->website ?? '';
         $this->secondary_url = $profile->secondary_url ?? '';
         $this->summary = $profile->summary ?? '';
-        $this->experience_text = $profile->experience_text ?? '';
-        $this->projects_text = $profile->projects_text ?? '';
+        $this->experience = $profile->experience ?? [];
+        $this->projects = $profile->projects ?? [];
         $this->skills = $profile->skills ?? [];
-        $this->education_text = $profile->education_text ?? '';
-        $this->soft_skills = $profile->soft_skills ?? '';
-        $this->languages = $profile->languages ?? '';
+        $this->education = $profile->education ?? [];
+        $this->soft_skills = $profile->soft_skills ?? [];
+        $this->languages = $profile->languages ?? [];
     }
 
     public function save(): void
@@ -73,10 +73,10 @@ class ProfileEdit extends Component
                 'website'         => $this->website,
                 'secondary_url'   => $this->secondary_url,
                 'summary'         => $this->summary,
-                'experience_text' => $this->experience_text,
-                'projects_text'   => $this->projects_text,
+                'experience' => $this->experience,
+                'projects'   => $this->projects,
                 'skills'          => $this->skills,
-                'education_text'  => $this->education_text,
+                'education'  => $this->education,
                 'soft_skills'     => $this->soft_skills,
                 'languages'       => $this->languages,
             ]
