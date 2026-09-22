@@ -123,4 +123,20 @@ class ProfileEdit extends Component
         $this->experience = array_values($this->experience);
     }
 
+    public function addProject(): void
+    {
+        $this->projects [] = [
+            'name' => '',
+            'url' => '',
+            'secondary_url' => '',
+            'description' => '',
+        ];
+    }
+
+    public function removeProject(int $index): void
+    {
+        unset($this->projects[$index]);
+        $this->projects = array_values($this->projects);
+    }
+
 }

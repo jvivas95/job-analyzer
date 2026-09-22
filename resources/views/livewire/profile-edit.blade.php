@@ -189,10 +189,82 @@
                         <x-input-error :messages="$errors->get('experience')" class="mt-2" />
                     </div>
 
-                    <div>
-                        <x-input-label for="projects_text" value="Proyectos personales (opcional)" />
-                        <textarea wire:model="projects_text" id="projects_text" rows="6" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
-                    </div>
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">
+                                Proyectos personales (opcional)
+                            </h3>
+
+                            <!-- Botón para añadir un nuevo bloque de experiencia -->
+                            <x-secondary-button type="button" wire:click="addProject">
+                                + Añadir proyecto
+                            </x-secondary-button>
+                        </div>
+                        <!-- Recorremos los datos (vengan de la BD o sean nuevos) -->
+                            @foreach ($projects as $index => $item)
+                                <div wire:key="projects-item-{{ $index }}" class="p-4 mb-4 border rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 relative">
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <!-- Nombre del proyecto -->
+                                        <div>
+                                            <x-input-label for="name-{{ $index }}" value="Nombre del proyecto" />
+                                            <x-text-input
+                                                id="name-{{ $index }}"
+                                                type="text"
+                                                wire:model="projects.{{ $index }}.name"
+                                                class="mt-1 block w-full"
+                                            />
+                                            <x-input-error :messages="$errors->get('projects.' . $index . '.name')" class="mt-1" />
+                                        </div>
+
+                                        <!-- URL -->
+                                        <div>
+                                            <x-input-label for="url-{{ $index }}" value="URL" />
+                                            <x-text-input
+                                                id="url-{{ $index }}"
+                                                type="url"
+                                                wire:model="projects.{{ $index }}.url"
+                                                class="mt-1 block w-full"
+                                                placeholder="(opcional)"
+                                            />
+                                            <x-input-error :messages="$errors->get('projects.' . $index . '.url')" class="mt-1" />
+                                        </div>
+
+                                        <!-- Secondary URL -->
+                                        <div>
+                                            <x-input-label for="secondary_url-{{ $index }}" value="Secondary URL" />
+                                            <x-text-input
+                                                id="secondary_url-{{ $index }}"
+                                                type="url"
+                                                wire:model="projects.{{ $index }}.secondary_url"
+                                                class="mt-1 block w-full"
+                                                placeholder="(opcional)"
+                                            />
+                                            <x-input-error :messages="$errors->get('projects.' . $index . '.secondary_url')" class="mt-1" />
+                                        </div>
+
+                                        <!-- Descripción -->
+                                        <div>
+                                            <x-input-label for="description-{{ $index }}" value="Descripción" />
+                                            <x-text-input
+                                                id="description-{{ $index }}"
+                                                type="textarea"
+                                                wire:model="projects.{{ $index }}.description"
+                                                class="mt-1 block w-full"
+                                            />
+                                            <x-input-error :messages="$errors->get('projects.' . $index . '.description')" class="mt-1" />
+                                        </div>
+                                    </div>
+
+                                    <!-- Botón de eliminar este registro específico -->
+                                    <div class="mt-3 text-right">
+                                        <x-danger-button type="button" wire:click="removeProject({{ $index }})">
+                                            Eliminar
+                                        </x-danger-button>
+                                    </div>
+
+                                </div>
+                            @endforeach
 
                     <div>
                         <x-input-label value="Habilidades técnicas" />
