@@ -20,7 +20,6 @@ jobs:
           script: |
             cd /var/www/job-analyzer
             git pull origin main
-            docker compose up -d --build
             docker compose exec -T app php artisan config:cache
             docker compose exec -T app php artisan route:cache
             docker compose exec -T app php artisan view:cache
