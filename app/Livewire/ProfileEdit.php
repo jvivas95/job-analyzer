@@ -11,7 +11,7 @@ use Livewire\Attributes\Layout;
 class ProfileEdit extends Component
 {
     #[Validate('required|string|max:255')]
-    public string $name = '';
+    public string $full_name = '';
 
     public string $title = '';
     public string $location = '';
@@ -36,15 +36,24 @@ class ProfileEdit extends Component
     public array $soft_skills = [];
     public array $languages = [];
 
+    public array $languageLevels = [
+        'A1 - Principiante',
+        'A2 - Básico',
+        'B1 - Intermedio',
+        'B2 - Intermedio Alto',
+        'C1 - Avanzado',
+        'C2 - Dominio eficaz',
+        'Nativo / Bilingüe',
+    ];
+
     public function mount(): void
     {
-        $user = Auth::user();
         $profile = Auth::user()->profile;
 
-        $this->name = $user->name ?? '';
+        $this->full_name = $profile->full_name ?? '';
         $this->title = $profile->title ?? '';
         $this->location = $profile->location ?? '';
-        $this->email = $user->email ?? '';
+        $this->email = $profile->email ?? '';
         $this->phone = $profile->phone ?? '';
         $this->linkedin = $profile->linkedin ?? '';
         $this->website = $profile->website ?? '';
@@ -66,25 +75,21 @@ class ProfileEdit extends Component
     {
         $this->validate();
 
-        Auth::user()->profile()->updateOrCreate(
-            ['user_id' => Auth::id()], // Condición de búsqueda
-            [
-                'title'           => $this->title,
-                'location'        => $this->location,
-                'email'           => $this->email,
-                'phone'           => $this->phone,
-                'linkedin'        => $this->linkedin,
-                'website'         => $this->website,
-                'secondary_url'   => $this->secondary_url,
-                'summary'         => $this->summary,
-                'experience' => $this->experience,
-                'projects'   => $this->projects,
-                'skills'          => $this->skills,
-                'education'  => $this->education,
-                'soft_skills'     => $this->soft_skills,
-                'languages'       => $this->languages,
-            ]
-        );
+        Auth::user()->profile()->update([
+            'title'           => $this->title,
+            'location'        => $this->location,
+            'phone'           => $this->phone,
+            'linkedin'        => $this->linkedin,
+            'website'         => $this->website,
+            'secondary_url'   => $this->secondary_url,
+            'summary'         => $this->summary,
+            'experience'      => $this->experience,
+            'projects'        => $this->projects,
+            'skills'          => $this->skills,
+            'education'       => $this->education,
+            'soft_skills'     => $this->soft_skills,
+            'languages'       => $this->languages,
+            ]);
 
         session()->flash('success', 'Perfil actualizado correctamente');
     }
@@ -153,6 +158,21 @@ class ProfileEdit extends Component
     {
         unset($this->education[$index]);
         $this->education = array_values($this->education);
+    }
+
+    public function addLanguage(): void
+    {
+        $this->languages[] = [
+            'name'  => '',
+            'level' => '',
+        ];
+    }
+
+    // Eliminar una fila de idioma por su índice
+    public function removeLanguage(int $index): void
+    {
+        unset($this->languages[$index]);
+        $this->languages = array_values($this->languages);
     }
 
 }

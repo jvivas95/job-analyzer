@@ -32,7 +32,11 @@ new #[Layout('layouts.guest')] class extends Component
 
         event(new Registered($user = User::create($validated)));
 
-        Profile::create(['user_id' => $user->id]);
+        Profile::create([
+            'user_id' => $user->id,
+            'full_name' => $user->name,
+            'email' => $user->email,
+            ]);
 
         Auth::login($user);
 

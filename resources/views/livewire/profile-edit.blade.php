@@ -13,14 +13,14 @@
                 <form wire:submit="save" class="space-y-6 bg-white p-6 rounded-lg shadow">
 
                     <div>
-                        <x-input-label for="name" value="Nombre completo" />
+                        <x-input-label for="full_name" value="Nombre completo" />
                         <x-text-input
-                            wire:model="name"
-                            id="name"
+                            wire:model="full_name"
+                            id="full_name"
                             type="text"
                             readonly
                             class="mt-1 block w-full" />
-                        <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('full_name')" class="mt-2" />
                     </div>
 
                     <div>
@@ -286,13 +286,14 @@
                             @endforeach
                         </div>
 
-                        <input
+                        <x-text-input
                             type="text"
                             wire:model="newSkill"
                             wire:keydown.enter.prevent="addSkill"
                             placeholder="Escribe una habilidad y pulsa Enter"
                             class="border-gray-300 rounded-md shadow-sm w-full"
-                        >
+                        />
+                        <x-input-error :messages="$errors->get('skills')" class="mt-2" />
                     </div>
 
                     {{-- Education --}}
@@ -410,9 +411,48 @@
                         <x-text-input wire:model="soft_skills" id="soft_skills" type="text" class="mt-1 block w-full" />
                     </div> --}}
 
-                    <div>
-                        <x-input-label for="languages" value="Idiomas" />
-                        <x-text-input wire:model="languages" id="languages" type="text" class="mt-1 block w-full" />
+                    <div class="mt-6 p-4 bg-white border rounded-lg shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-gray-800">Idiomas</h3>
+                            <button type="button"
+                                    wire:click="addLanguage"
+                                    class="px-3 py-1 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700">
+                                + Añadir idioma
+                            </button>
+                        </div>
+
+                        <div class="space-y-3">
+                            @foreach($languages as $index => $language)
+                                <div wire:key="language-{{ $index }}" class="flex items-center gap-3">
+
+                                    <!-- Nombre del idioma -->
+                                    <div class="flex-1">
+                                        <input type="text"
+                                            wire:model="languages.{{ $index }}.name"
+                                            placeholder="Ej: Español, Inglés, Catalán..."
+                                            class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                                    </div>
+
+                                    <!-- Desplegable de nivel -->
+                                    <div class="w-1/3">
+                                        <select wire:model="languages.{{ $index }}.level"
+                                                class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                                            @foreach($languageLevels as $level)
+                                                <option value="{{ $level }}">{{ $level }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- Botón eliminar -->
+                                    <button type="button"
+                                            wire:click="removeLanguage({{ $index }})"
+                                            class="text-red-500 hover:text-red-700 p-1 font-bold text-lg"
+                                            title="Eliminar idioma">
+                                        &times;
+                                    </button>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
 
                     <x-primary-button>Guardar perfil</x-primary-button>
