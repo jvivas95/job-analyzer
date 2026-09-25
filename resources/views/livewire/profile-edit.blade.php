@@ -66,10 +66,61 @@
                         </div>
                     </div>
 
+                    {{-- Summary --}}
                     <div>
                         <x-input-label for="summary" value="Resumen profesional" />
                         <textarea wire:model="summary" id="summary" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
                         <x-input-error :messages="$errors->get('summary')" class="mt-2" />
+                    </div>
+
+                    {{-- Skills --}}
+                    <div>
+                        <x-input-label value="Habilidades técnicas" />
+
+                        <div class="flex flex-wrap gap-2 mb-2">
+                            @foreach($skills as $index => $skill)
+                                <span class="inline-flex items-center gap-1 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">
+                                    {{ $skill }}
+                                    <button type="button" wire:click="removeSkill({{ $index }})" class="text-indigo-500 hover:text-indigo-900">
+                                        &times;
+                                    </button>
+                                </span>
+                            @endforeach
+                        </div>
+
+                        <x-text-input
+                            type="text"
+                            wire:model="newSkill"
+                            wire:keydown.enter.prevent="addSkill"
+                            placeholder="Escribe una habilidad y pulsa Enter"
+                            class="border-gray-300 rounded-md shadow-sm w-full"
+                        />
+                        <x-input-error :messages="$errors->get('skills')" class="mt-2" />
+                    </div>
+
+                    {{-- Soft Skills --}}
+                    <div>
+                        <x-input-label value="Soft Skills" />
+
+                        <div class="flex flex-wrap gap-2 mb-2">
+                            @foreach($soft_skills as $index => $soft_skill)
+                                <span class="inline-flex items-center gap-1 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">
+                                    {{ $soft_skill }}
+                                    <button type="button" wire:click="removeSoftSkill({{ $index }})" class="text-indigo-500 hover:text-indigo-900">
+                                        &times;
+                                    </button>
+                                </span>
+                            @endforeach
+                        </div>
+
+                        <x-text-input
+                            type="text"
+                            wire:model="newSoftSkill"
+                            wire:keydown.enter.prevent="addSoftSkill"
+                            placeholder="Escribe una soft skill y pulsa Enter"
+                            class="border-gray-300 rounded-md shadow-sm w-full"
+                        />
+                        <x-input-error :messages="$errors->get('skills')" class="mt-2" />
                     </div>
 
                     <div class="mb-6">
@@ -271,30 +322,6 @@
 
                                 </div>
                             @endforeach
-
-                    <div>
-                        <x-input-label value="Habilidades técnicas" />
-
-                        <div class="flex flex-wrap gap-2 mb-2">
-                            @foreach($skills as $index => $skill)
-                                <span class="inline-flex items-center gap-1 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">
-                                    {{ $skill }}
-                                    <button type="button" wire:click="removeSkill({{ $index }})" class="text-indigo-500 hover:text-indigo-900">
-                                        &times;
-                                    </button>
-                                </span>
-                            @endforeach
-                        </div>
-
-                        <x-text-input
-                            type="text"
-                            wire:model="newSkill"
-                            wire:keydown.enter.prevent="addSkill"
-                            placeholder="Escribe una habilidad y pulsa Enter"
-                            class="border-gray-300 rounded-md shadow-sm w-full"
-                        />
-                        <x-input-error :messages="$errors->get('skills')" class="mt-2" />
-                    </div>
 
                     {{-- Education --}}
                     <div class="mb-6">

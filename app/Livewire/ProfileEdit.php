@@ -34,6 +34,7 @@ class ProfileEdit extends Component
     public string $newSkill = '';
     public array $education = [];
     public array $soft_skills = [];
+    public string $newSoftSkill = '';
     public array $languages = [];
 
     public array $languageLevels = [
@@ -109,6 +110,23 @@ class ProfileEdit extends Component
     {
         unset($this->skills[$index]);
         $this->skills = array_values($this->skills);
+    }
+
+    public function addSoftSkill(): void
+    {
+        $trimed = trim($this->newSoftSkill);
+
+        if ($trimed !== '' && !in_array($trimed, $this->soft_skills, true)) {
+            $this->soft_skills[] = $trimed;
+        }
+
+        $this->newSoftSkill = '';
+    }
+
+    public function removeSoftSkill(int $index): void
+    {
+        unset($this->soft_skills[$index]);
+        $this->soft_skills = array_values($this->soft_skills);
     }
 
     public function addExperience(): void
