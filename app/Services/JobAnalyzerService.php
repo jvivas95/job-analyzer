@@ -6,6 +6,8 @@ namespace App\Services;
 
 use App\DTOs\JobAnalysisResult;
 use App\Models\JobOffer;
+use App\Models\Profile;
+use App\Services\Profile\ProfileCvTransformer;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
@@ -17,6 +19,7 @@ class JobAnalyzerService
 
     public function __construct(
         private ?string $apiKey = null,
+        private readonly ProfileCvTransformer $cvTransformer,
     ) {
         $this->apiKey = $apiKey ?? config('services.openai.key');
     }
@@ -25,6 +28,12 @@ class JobAnalyzerService
     {
         if (blank($this->apiKey)) {
             throw new RuntimeException('OPENAI_API_KEY no configurada.');
+        }
+
+        $profile = $offer->user->profile;
+
+        if (!$profile) {
+            throw new RuntimeException('El usuario no tiene un perfil configurado');
         }
 
         $response = Http::withToken($this->apiKey)
@@ -40,7 +49,7 @@ class JobAnalyzerService
                     ],
                 ],
                 'messages' => [
-                    ['role' => 'system', 'content' => $this->systemPrompt()],
+                    ['role' => 'system', 'content' => $this->systemPrompt($profile)],
                     ['role' => 'user', 'content' => $this->userPrompt($offer)],
                 ],
                 'temperature' => 0.3,
@@ -67,10 +76,13 @@ class JobAnalyzerService
         return JobAnalysisResult::fromArray($data ?? []);
     }
 
-    private function systemPrompt(): string
+    private function systemPrompt(Profile $profile): string
     {
         // config('cv_base') es la única fuente de verdad de tu perfil.
-        $cv = json_encode(config('cv_base'), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $cv = json_encode(
+            $this->cvTransformer->toCvArray($profile),
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+        );
 
         return <<<PROMPT
         Eres un reclutador técnico con más de 15 años de experiencia, especializado en perfiles backend PHP/Laravel y Python.
