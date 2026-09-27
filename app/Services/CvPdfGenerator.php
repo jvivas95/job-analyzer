@@ -6,7 +6,6 @@ namespace App\Services;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\File;
 use RuntimeException;
 
 use App\Models\JobOffer;
@@ -32,13 +31,18 @@ class CvPdfGenerator
 
         $letterPdf = Pdf::loadView("pdf.cover-letter", [
             'coverLetter' => $offer->cover_letter,
-            'contact' => $offer->adapted_cv_data['contact'] ?? [],
+            'contact' => [
+                'name' => $offer->adapted_cv_data['full_name'] ?? '',
+                'email' => $offer->adapted_cv_data['email'] ?? '',
+                'phone' => $offer->adapted_cv_data['phone'] ?? '',
+                'location' => $offer->adapted_cv_data['location'] ?? '',
+            ],
             'company' => $offer->company,
             ])->output();
 
         Storage::disk('s3')->put($letterPath, $letterPdf);
 
-        if (!File::exists(Storage::disk('s3')->path($letterPath))) {
+        if (!Storage::disk('s3')->exists($letterPath)) {
             throw new RuntimeException("No se pudo generar el PDF de la carta para la oferta #{$offer->id}.");
         }
 
