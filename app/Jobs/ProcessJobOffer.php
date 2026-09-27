@@ -48,6 +48,7 @@ class ProcessJobOffer implements ShouldQueue
                 'adapted_cv_data' => $this->buildAdaptedCvData($result, $cvTransformer),
                 'cover_letter' => $result->coverLetter,
                 'status' => 'processed',
+                'failure_reason' => null,
             ]);
 
             if ($this->offer->fresh()->isHighFit()) {
