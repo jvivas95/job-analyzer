@@ -18,8 +18,8 @@ class JobAnalyzerService
     private const string MODEL = 'gpt-4o-mini';
 
     public function __construct(
-        private ?string $apiKey = null,
         private readonly ProfileCvTransformer $cvTransformer,
+        private ?string $apiKey = null,
     ) {
         $this->apiKey = $apiKey ?? config('services.openai.key');
     }
