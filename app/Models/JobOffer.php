@@ -38,7 +38,7 @@ class JobOffer extends Model
 
     public function isHighFit(): bool
     {
-        return ($this->fit_score ?? 0) >= 80;
+        return ($this->fit_score ?? 0) >= config('jobanalyzer.threshold');
     }
 
     public function scopeProcessed(Builder $query): Builder
