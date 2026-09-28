@@ -1,5 +1,5 @@
 <?php
 
 return[
-    'treshold' => env('JOB_MATCH_TRESHOLD', 80),
+    'threshold' => env('JOB_MATCH_TRESHOLD', 80),
 ];
