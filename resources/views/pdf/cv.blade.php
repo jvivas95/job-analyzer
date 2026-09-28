@@ -5,19 +5,19 @@
 <style>
     @page { margin: 100px 40px 80px 40px; }
     * { box-sizing: border-box; }
-    body { font-family: Helvetica, Arial, sans-serif; font-size: 10.5pt; line-height: 1.45; color: #1a1a1a; }
+    body { font-family: Helvetica, Arial, sans-serif; font-size: 10.5pt; line-height: 1.55; color: #1a1a1a; }
     .clearfix::after { content: ""; display: table; clear: both; }
-    h1 { font-size: 20pt; margin: 0 0 2px 0; font-weight: bold; }
-    h2 { font-size: 11pt; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #333; padding-bottom: 3px; margin: 16px 0 8px 0; font-weight: bold; }
-    .title { font-size: 12pt; color: #444; margin-bottom: 6px; }
-    .contact { font-size: 9.5pt; color: #444; margin-bottom: 4px; }
+    h1 { font-size: 20pt; margin: 0 0 4px 0; font-weight: bold; }
+    h2 { font-size: 11pt; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #333; padding-bottom: 4px; margin: 20px 0 10px 0; font-weight: bold; }
+    .title { font-size: 12pt; color: #444; margin-bottom: 8px; }
+    .contact { font-size: 9.5pt; color: #444; margin-bottom: 8px; }
     .contact span { margin-right: 10px; }
-    p { margin: 0 0 6px 0; }
-    .entry { margin-bottom: 10px; }
+    p { margin: 0 0 9px 0; }
+    .entry { margin-bottom: 14px; }
     .entry-left { float: left; font-weight: bold; }
     .entry-right { float: right; font-size: 9.5pt; color: #555; }
     ul { margin: 4px 0 0 16px; padding: 0; }
-    li { margin-bottom: 2px; }
+    li { margin-bottom: 4px; }
 </style>
 </head>
 <body>
@@ -34,7 +34,7 @@
 
     @if(!empty($data['summary']))
         <h2>Perfil</h2>
-        <p>{{ $data['summary'] }}</p>
+        <p>{!! nl2br(e($data['summary'])) !!}</p>
     @endif
 
     @if(!empty($data['experience']))
@@ -47,7 +47,7 @@
                         {{ $exp['start_date'] ?? '' }} – {{ ($exp['is_current'] ?? false) ? 'Actualidad' : ($exp['end_date'] ?? '') }}
                     </span>
                 </div>
-                <p>{{ $exp['description'] ?? '' }}</p>
+                <p>{!! nl2br(e($exp['description'] ?? '')) !!}</p>
             </div>
         @endforeach
     @endif
@@ -61,7 +61,7 @@
                         {{ $project['name'] ?? '' }}{{ !empty($project['url']) ? ' — '.$project['url'] : '' }}
                     </span>
                 </div>
-                <p>{{ $project['description'] ?? '' }}</p>
+                <p>{!! nl2br(e($project['description'] ?? '')) !!}</p>
             </div>
         @endforeach
     @endif

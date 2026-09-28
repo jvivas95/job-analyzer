@@ -15,6 +15,7 @@ use RuntimeException;
 class JobAnalyzerService
 {
     private const string ENDPOINT = 'https://api.openai.com/v1/chat/completions';
+
     private const string MODEL = 'gpt-4o-mini';
 
     public function __construct(
@@ -32,7 +33,7 @@ class JobAnalyzerService
 
         $profile = $offer->user->profile;
 
-        if (!$profile) {
+        if (! $profile) {
             throw new RuntimeException('El usuario no tiene un perfil configurado');
         }
 
@@ -58,8 +59,8 @@ class JobAnalyzerService
         if ($response->failed()) {
             Log::error('OpenAI API request failed', [
                 'offer_id' => $offer->id,
-                'status'   => $response->status(),
-                'body'     => $response->body(),
+                'status' => $response->status(),
+                'body' => $response->body(),
             ]);
 
             throw new RuntimeException('Failed to analyze job description');
@@ -99,16 +100,16 @@ class JobAnalyzerService
         - reason: 2-3 frases explicando la puntuación, en español, honesto y directo.
         - adapted_summary: resumen profesional (máx. 60 palabras) reescrito para encajar con esta oferta.
         - highlighted_projects: qué proyectos del candidato destacar para esta oferta, y por qué.
-        - cover_letter: carta de presentación en español, profesional, directa, máx. 250 palabras.
+        - cover_letter: carta de presentación en español, profesional y directa, máx. 250 palabras. Incluye saludo inicial y despedida ("Atentamente,"), pero no repitas el nombre ni los datos de contacto del candidato; se añadirán automáticamente.
         PROMPT;
     }
 
     private function userPrompt(JobOffer $offer): string
     {
         return "OFERTA DE EMPLEO\n"
-            . "Empresa: {$offer->company}\n"
-            . "Título: {$offer->title}\n\n"
-            . $offer->description;
+            ."Empresa: {$offer->company}\n"
+            ."Título: {$offer->title}\n\n"
+            .$offer->description;
     }
 
     private function jsonSchema(): array
