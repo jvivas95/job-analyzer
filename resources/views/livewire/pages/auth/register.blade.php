@@ -45,52 +45,40 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <form wire:submit="register">
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+    <div class="mb-7">
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#a65b3e]">Empieza por aquí</p>
+        <h2 class="mt-3 font-display text-4xl leading-tight text-[#20332e]">Crea tu cuenta</h2>
+        <p class="mt-3 text-sm leading-6 text-[#65746d]">Organiza tus oportunidades y prepara cada candidatura desde un solo lugar.</p>
+    </div>
+
+    <form wire:submit="register" class="grid gap-4">
+        <div class="grid gap-2">
+            <label for="name" class="text-sm font-semibold text-[#30443c]">Nombre completo</label>
+            <input wire:model="name" id="name" class="w-full rounded-md border border-[#d4ded6] bg-white px-4 py-3 text-sm text-[#20332e] shadow-sm placeholder:text-[#9aa69f] focus:border-[#39785d] focus:outline-none focus:ring-2 focus:ring-[#39785d]/15" type="text" name="name" placeholder="Tu nombre" required autofocus autocomplete="name">
+            <x-input-error :messages="$errors->get('name')" class="text-sm text-[#a64036]" />
         </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <div class="grid gap-2">
+            <label for="email" class="text-sm font-semibold text-[#30443c]">Correo electrónico</label>
+            <input wire:model="email" id="email" class="w-full rounded-md border border-[#d4ded6] bg-white px-4 py-3 text-sm text-[#20332e] shadow-sm placeholder:text-[#9aa69f] focus:border-[#39785d] focus:outline-none focus:ring-2 focus:ring-[#39785d]/15" type="email" name="email" placeholder="tu@correo.com" required autocomplete="username">
+            <x-input-error :messages="$errors->get('email')" class="text-sm text-[#a64036]" />
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="grid gap-2">
+            <label for="password" class="text-sm font-semibold text-[#30443c]">Contraseña</label>
+            <input wire:model="password" id="password" class="w-full rounded-md border border-[#d4ded6] bg-white px-4 py-3 text-sm text-[#20332e] shadow-sm placeholder:text-[#9aa69f] focus:border-[#39785d] focus:outline-none focus:ring-2 focus:ring-[#39785d]/15" type="password" name="password" placeholder="Crea una contraseña" required autocomplete="new-password">
+            <x-input-error :messages="$errors->get('password')" class="text-sm text-[#a64036]" />
         </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        <div class="grid gap-2">
+            <label for="password_confirmation" class="text-sm font-semibold text-[#30443c]">Confirma tu contraseña</label>
+            <input wire:model="password_confirmation" id="password_confirmation" class="w-full rounded-md border border-[#d4ded6] bg-white px-4 py-3 text-sm text-[#20332e] shadow-sm placeholder:text-[#9aa69f] focus:border-[#39785d] focus:outline-none focus:ring-2 focus:ring-[#39785d]/15" type="password" name="password_confirmation" placeholder="Repite tu contraseña" required autocomplete="new-password">
+            <x-input-error :messages="$errors->get('password_confirmation')" class="text-sm text-[#a64036]" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}" wire:navigate>
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
+        <button type="submit" wire:loading.attr="disabled" wire:target="register" class="mt-2 inline-flex w-full items-center justify-center rounded-md bg-[#27634d] px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-[#1e513d] focus:outline-none focus:ring-2 focus:ring-[#39785d] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-70">
+            <span wire:loading.remove wire:target="register">Crear cuenta</span>
+            <span wire:loading wire:target="register">Creando cuenta...</span>
+        </button>
     </form>
 </div>
