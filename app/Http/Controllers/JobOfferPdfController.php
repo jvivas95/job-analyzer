@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\JobOffer;
+use App\Services\CvPdfGenerator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -24,5 +25,19 @@ class JobOfferPdfController extends Controller
         abort_if(blank($path), 404);
 
         return Storage::disk('s3')->download($path);
+    }
+
+    public function generate(JobOffer $offer, CvPdfGenerator $generator)
+    {
+        abort_if($offer->user_id !== Auth::id(), 403);
+        abort_unless($offer->status === 'processed', 422, 'La oferta aún no está procesada.');
+
+        if (! $offer->isHighFit()){
+            $offer->update(['pdf_forced' => true]);
+        }
+
+        $generator->generateForOffer($offer);
+
+        return back()->with('success', 'Cv y carta generados.');
     }
 }

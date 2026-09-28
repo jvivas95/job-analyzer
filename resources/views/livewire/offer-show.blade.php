@@ -104,7 +104,21 @@
                         @endif
                     </div>
                 @else
-                    <p class="mt-3 text-sm leading-6 text-[#7a8881]">Los documentos aparecerán aquí cuando el análisis termine.</p>
+                    @if($offer->status === 'processed' && !$offer->isHighFit())
+                        <p class="mt-3 text-sm leading-6 text-[#7a8881]">
+                            Tu afinidad ({{ $offer->fit_score }}%) está por debajo del umbral ({{ config('jobanalyzer.threshold') }}%), así que no se generaron los documentos automáticamente.
+                        </p>
+                        <form method="POST" action="{{ route('job-offers.generate-pdf', $offer) }}" class="mt-4">
+                            @csrf
+                            <button type="submit" class="inline-flex w-full items-center justify-center rounded-md border border-[#b9cbbf] bg-white px-4 py-2.5 text-sm font-semibold text-[#27634d] transition hover:bg-[#eaf2ec]">
+                                Generar igualmente
+                            </button>
+                        </form>
+                    @elseif($offer->status === 'failed')
+                        <p class="mt-3 text-sm leading-6 text-[#7a8881]">No hay documentos porque el análisis falló.</p>
+                    @else
+                        <p class="mt-3 text-sm leading-6 text-[#7a8881]">Los documentos aparecerán aquí cuando el análisis termine.</p>
+                    @endif
                 @endif
             </aside>
         </div>

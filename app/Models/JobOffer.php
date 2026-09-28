@@ -33,6 +33,7 @@ class JobOffer extends Model
             'analysis_result' => 'array',
             'adapted_cv_data' => 'array',
             'fit_score' => 'integer',
+            'pdf_forced' => 'boolean',
         ];
     }
 
