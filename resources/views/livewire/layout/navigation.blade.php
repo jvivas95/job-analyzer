@@ -48,7 +48,7 @@ new class extends Component
                     </button>
 
                     <div x-cloak x-show="accountOpen" x-transition.origin.top.right class="absolute right-0 top-full mt-2 w-56 overflow-hidden rounded-md border border-[#dce4dd] bg-white py-1 shadow-lg shadow-[#173c35]/10">
-                        <a href="{{ route('profile.edit') }}" wire:navigate class="block px-4 py-2.5 text-sm text-[#53675f] transition hover:bg-[#f3f6f2] hover:text-[#20332e]">Mi perfil</a>
+                        <a href="{{ route('profile') }}" wire:navigate class="block px-4 py-2.5 text-sm text-[#53675f] transition hover:bg-[#f3f6f2] hover:text-[#20332e]">Configuración cuenta</a>
                         <button type="button" wire:click="logout" class="block w-full px-4 py-2.5 text-left text-sm text-[#a65b3e] transition hover:bg-[#fbf3ed]">Cerrar sesión</button>
                     </div>
                 </div>
@@ -65,7 +65,7 @@ new class extends Component
             <a href="{{ route('dashboard') }}" wire:navigate @class(['rounded-md px-3 py-2.5 text-sm font-medium', 'bg-[#eaf2ec] text-[#27634d]' => request()->routeIs('dashboard'), 'text-[#53675f] hover:bg-[#f3f6f2]' => !request()->routeIs('dashboard')])>Inicio</a>
             <a href="{{ route('offers.index') }}" wire:navigate @class(['rounded-md px-3 py-2.5 text-sm font-medium', 'bg-[#eaf2ec] text-[#27634d]' => request()->routeIs('offers.index', 'offers.show'), 'text-[#53675f] hover:bg-[#f3f6f2]' => !request()->routeIs('offers.index', 'offers.show')])>Mis ofertas</a>
             <a href="{{ route('offers.create') }}" wire:navigate @class(['rounded-md px-3 py-2.5 text-sm font-medium', 'bg-[#eaf2ec] text-[#27634d]' => request()->routeIs('offers.create'), 'text-[#53675f] hover:bg-[#f3f6f2]' => !request()->routeIs('offers.create')])>Nueva oferta</a>
-            <a href="{{ route('profile.edit') }}" wire:navigate @class(['rounded-md px-3 py-2.5 text-sm font-medium', 'bg-[#eaf2ec] text-[#27634d]' => request()->routeIs('profile.edit'), 'text-[#53675f] hover:bg-[#f3f6f2]' => !request()->routeIs('profile.edit')])>Mi perfil</a>
+            <a href="{{ route('profile') }}" wire:navigate @class(['rounded-md px-3 py-2.5 text-sm font-medium', 'bg-[#eaf2ec] text-[#27634d]' => request()->routeIs('profile'), 'text-[#53675f] hover:bg-[#f3f6f2]' => !request()->routeIs('profile.edit')])>Configuración cuenta</a>
         </div>
 
         <div class="mt-3 flex items-center justify-between gap-3 border-t border-[#dce4dd] pt-3">
