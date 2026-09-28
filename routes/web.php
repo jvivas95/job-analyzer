@@ -31,7 +31,7 @@ Route::middleware(['auth'])->group(function(){
 
     Route::get('/offers/{offer}', OfferShow::class)->name('offers.show');
     Route::get('/offers/{offer}/download/{type}', [JobOfferPdfController::class, 'download'])->name('offers.download');
-    Route::post('/job-offers/{jobOffer}/generate-pdf', [JobOfferPdfController::class, 'generatePdf'])->name('job-offers.generate-pdf');
+    Route::post('/job-offers/{jobOffer}/generate-pdf', [JobOfferPdfController::class, 'generate'])->name('job-offers.generate-pdf');
 
     Route::get('/profile-edit', ProfileEdit::class)->name('profile.edit');
 
