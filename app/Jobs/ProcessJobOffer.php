@@ -6,6 +6,7 @@ namespace App\Jobs;
 use App\DTOs\JobAnalysisResult;
 use App\Models\JobOffer;
 use App\Services\CvPdfGenerator;
+use App\Services\Profile\ProfileCvTransformer;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -32,7 +33,7 @@ class ProcessJobOffer implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(JobAnalyzerService $analyzer): void
+    public function handle(JobAnalyzerService $analyzer, ProfileCvTransformer $cvTransformer): void
     {
         //
         $this->offer->update(['status' => 'processing']);
@@ -44,9 +45,10 @@ class ProcessJobOffer implements ShouldQueue
             $this->offer->update([
                 'fit_score' => $result->fitScore,
                 'analysis_result' => $result->toArray(),
-                'adapted_cv_data' => $this->buildAdaptedCvData($result),
+                'adapted_cv_data' => $this->buildAdaptedCvData($result, $cvTransformer),
                 'cover_letter' => $result->coverLetter,
                 'status' => 'processed',
+                'failure_reason' => null,
             ]);
 
             if ($this->offer->fresh()->isHighFit()) {
@@ -68,9 +70,12 @@ class ProcessJobOffer implements ShouldQueue
 
     }
 
-    private function buildAdaptedCvData(JobAnalysisResult $result): array
+    private function buildAdaptedCvData(JobAnalysisResult $result, ProfileCvTransformer $cvTransformer): array
         {
-            $base = config('cv_base');
+
+            $profile = $this->offer->user->profile;
+
+            $base = $cvTransformer->toCvArray($profile);
             $base['summary'] = $result->adaptedSummary;
             $base['highlighted_projects'] = $result->highlightedProjects;
 

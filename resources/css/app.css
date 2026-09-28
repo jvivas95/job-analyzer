@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+	.profile-form label {
+		@apply text-sm font-semibold text-[#30443c];
+	}
+
+	.profile-form input:not([type="checkbox"]),
+	.profile-form textarea,
+	.profile-form select {
+		@apply w-full rounded-md border border-[#d4ded6] bg-white px-3 py-2.5 text-sm text-[#20332e] shadow-sm;
+	}
+
+	.profile-form input:not([type="checkbox"]):focus,
+	.profile-form textarea:focus,
+	.profile-form select:focus {
+		@apply border-[#39785d] outline-none ring-2 ring-[#39785d]/15;
+	}
+
+	.profile-form input[readonly],
+	.profile-form input:disabled {
+		@apply cursor-not-allowed bg-[#f3f6f2] text-[#7a8881];
+	}
+}

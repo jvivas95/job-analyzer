@@ -1,16 +1,25 @@
-<div class="min-h-screen bg-[#0a1111] px-4 py-8 sm:px-6 lg:px-8">
-    <div class="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1.3fr_0.7fr]">
-        <div class="rounded-[30px] border border-[#24463f] bg-[#0d1716] p-6 shadow-[0_0_0_1px_rgba(88,166,146,0.12),0_20px_40px_rgba(10,18,17,0.75)] sm:p-8">
-            <div class="max-w-3xl mx-auto">
-                <h1 class="text-2xl font-bold text-gray-900 mb-6">Mi perfil</h1>
+<div class="min-h-[calc(100vh-4rem)] bg-[#f3f6f2] px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <div class="mx-auto max-w-5xl">
+        <header class="mb-8 border-b border-[#dce4dd] pb-6">
+            <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#a65b3e]">Tu información profesional</p>
+            <h1 class="mt-2 font-display text-4xl leading-tight text-[#20332e]">Mi perfil</h1>
+            <p class="mt-2 max-w-2xl text-sm leading-6 text-[#65746d]">Mantén actualizada tu experiencia para obtener análisis de ofertas más precisos y candidaturas mejor adaptadas.</p>
+        </header>
+
+        <div class="profile-form">
 
                 @if (session('success'))
-                    <div class="mb-4 p-3 bg-green-100 text-green-700 rounded">
+                    <div class="mb-6 rounded-md border border-[#c9dfd0] bg-[#eaf4ed] px-4 py-3 text-sm text-[#27634d]" role="status">
                         {{ session('success') }}
                     </div>
                 @endif
 
-                <form wire:submit="save" class="space-y-6 bg-white p-6 rounded-lg shadow">
+                <form wire:submit="save" class="grid gap-8">
+                    <section class="grid gap-5 border-b border-[#dce4dd] pb-8">
+                        <div>
+                            <h2 class="font-display text-2xl text-[#20332e]">Datos personales</h2>
+                            <p class="mt-1 text-sm text-[#65746d]">Información básica para identificar tu perfil.</p>
+                        </div>
 
                     <div>
                         <x-input-label for="full_name" value="Nombre completo" />
@@ -33,7 +42,7 @@
                         <x-text-input wire:model="location" id="location" type="text" class="mt-1 block w-full" />
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
                             <x-input-label for="email" value="Email de contacto" />
                             <x-text-input
@@ -55,7 +64,7 @@
                         <x-text-input wire:model="linkedin" id="linkedin" type="text" class="mt-1 block w-full" />
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
                             <x-input-label for="website" value="Sitio web (opcional)" />
                             <x-text-input wire:model="website" id="website" type="text" class="mt-1 block w-full" />
@@ -66,22 +75,26 @@
                         </div>
                     </div>
 
-                    {{-- Summary --}}
                     <div>
                         <x-input-label for="summary" value="Resumen profesional" />
-                        <textarea wire:model="summary" id="summary" rows="4" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
+                        <textarea wire:model="summary" id="summary" rows="5" placeholder="Resume tu experiencia, especialidad y principales fortalezas..." class="mt-1 block w-full resize-y rounded-md border border-[#d4ded6] bg-white px-3 py-2.5 text-sm leading-6 text-[#20332e] shadow-sm placeholder:text-[#9aa69f] focus:border-[#39785d] focus:outline-none focus:ring-2 focus:ring-[#39785d]/15"></textarea>
                         <x-input-error :messages="$errors->get('summary')" class="mt-2" />
                     </div>
+                    </section>
 
-                    {{-- Skills --}}
-                    <div>
+                    <section class="grid gap-5 border-b border-[#dce4dd] pb-8">
+                        <div>
+                            <h2 class="font-display text-2xl text-[#20332e]">Habilidades</h2>
+                            <p class="mt-1 text-sm text-[#65746d]">Añade competencias para afinar la comparación con cada puesto.</p>
+                        </div>
+                    <div class="grid gap-2">
                         <x-input-label value="Habilidades técnicas" />
 
                         <div class="flex flex-wrap gap-2 mb-2">
                             @foreach($skills as $index => $skill)
-                                <span class="inline-flex items-center gap-1 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">
+                                <span class="inline-flex items-center gap-2 rounded-md bg-[#e5f2e8] px-2.5 py-1.5 text-sm text-[#27634d]">
                                     {{ $skill }}
-                                    <button type="button" wire:click="removeSkill({{ $index }})" class="text-indigo-500 hover:text-indigo-900">
+                                    <button type="button" wire:click="removeSkill({{ $index }})" aria-label="Eliminar {{ $skill }}" class="text-[#537761] hover:text-[#173c35]">
                                         &times;
                                     </button>
                                 </span>
@@ -93,20 +106,20 @@
                             wire:model="newSkill"
                             wire:keydown.enter.prevent="addSkill"
                             placeholder="Escribe una habilidad y pulsa Enter"
-                            class="border-gray-300 rounded-md shadow-sm w-full"
+                            class="w-full rounded-md"
                         />
                         <x-input-error :messages="$errors->get('skills')" class="mt-2" />
                     </div>
 
                     {{-- Soft Skills --}}
-                    <div>
+                    <div class="grid gap-2">
                         <x-input-label value="Soft Skills" />
 
                         <div class="flex flex-wrap gap-2 mb-2">
                             @foreach($soft_skills as $index => $soft_skill)
-                                <span class="inline-flex items-center gap-1 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">
+                                <span class="inline-flex items-center gap-2 rounded-md bg-[#f6e8dc] px-2.5 py-1.5 text-sm text-[#92533b]">
                                     {{ $soft_skill }}
-                                    <button type="button" wire:click="removeSoftSkill({{ $index }})" class="text-indigo-500 hover:text-indigo-900">
+                                    <button type="button" wire:click="removeSoftSkill({{ $index }})" aria-label="Eliminar {{ $soft_skill }}" class="text-[#a65b3e] hover:text-[#783d2c]">
                                         &times;
                                     </button>
                                 </span>
@@ -118,32 +131,29 @@
                             wire:model="newSoftSkill"
                             wire:keydown.enter.prevent="addSoftSkill"
                             placeholder="Escribe una soft skill y pulsa Enter"
-                            class="border-gray-300 rounded-md shadow-sm w-full"
+                            class="w-full rounded-md"
                         />
                         <x-input-error :messages="$errors->get('skills')" class="mt-2" />
                     </div>
+                    </section>
 
-                    <div class="mb-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">
-                                Experiencia Laboral
-                            </h3>
+                    <section class="grid gap-5 border-b border-[#dce4dd] pb-8">
+                    <div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                            <h2 class="font-display text-2xl text-[#20332e]">Experiencia laboral</h2>
 
-                            <!-- Botón para añadir un nuevo bloque de experiencia -->
-                            <x-secondary-button type="button" wire:click="addExperience">
-                                + Añadir experiencia
-                            </x-secondary-button>
+                            <button type="button" wire:click="addExperience" class="rounded-md border border-[#b9cbbf] px-3 py-2 text-sm font-semibold text-[#27634d] transition hover:bg-white">Añadir experiencia</button>
                         </div>
 
                         <!-- Si no hay nada en la experiencia (control con @ if por seguridad) -->
                         @if (empty($experience))
-                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                            <p class="text-sm text-[#7a8881]">
                                 No has añadido ninguna experiencia laboral todavía.
                             </p>
                         @else
                             <!-- Recorremos los datos (vengan de la BD o sean nuevos) -->
                             @foreach ($experience as $index => $item)
-                                <div wire:key="experience-item-{{ $index }}" class="p-4 mb-4 border rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 relative">
+                                <div wire:key="experience-item-{{ $index }}" class="relative grid gap-4 rounded-md border border-[#dce4dd] bg-white p-4 sm:p-5">
 
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <!-- Nombre del puesto -->
@@ -173,14 +183,14 @@
                                         </div>
 
                                         <!-- Period -->
-                                        <div class="mt-3 flex items-center">
+                                        <div class="mt-3 flex items-center gap-2">
                                             <input
                                                 id="is_current-{{ $index }}"
                                                 type="checkbox"
                                                 wire:model.live="experience.{{ $index }}.is_current"
-                                                class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                                                class="h-4 w-4 rounded border-[#b9cbbf] text-[#27634d] focus:ring-[#39785d]/30"
                                             >
-                                            <x-input-label for="is_current-{{ $index }}" value="Trabajo actualmente aquí" class="ml-2" />
+                                            <x-input-label for="is_current-{{ $index }}" value="Trabajo actualmente aquí" />
                                         </div>
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
                                             <!-- Fecha de Inicio -->
@@ -207,13 +217,12 @@
                                                     />
                                                     <x-input-error :messages="$errors->get('experience.' . $index . '.end_date')" class="mt-1" />
                                                 @else
-                                                    <!-- Opcional: Un mensaje o campo deshabilitado indicando 'Actualidad' -->
                                                     <x-input-label value="Fecha de fin" />
                                                     <x-text-input
                                                         type="text"
                                                         value="Actualmente"
                                                         disabled
-                                                        class="mt-1 block w-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                                                        class="mt-1 block w-full cursor-not-allowed bg-[#f3f6f2] text-[#7a8881]"
                                                     />
                                                 @endif
                                             </div>
@@ -222,21 +231,19 @@
                                         <!-- Descripción -->
                                         <div>
                                             <x-input-label for="description-{{ $index }}" value="Descripción" />
-                                            <x-text-input
+                                            <textarea
                                                 id="description-{{ $index }}"
-                                                type="textarea"
                                                 wire:model="experience.{{ $index }}.description"
-                                                class="mt-1 block w-full"
-                                            />
+                                                rows="3"
+                                                class="mt-1 block w-full resize-y rounded-md border border-[#d4ded6] bg-white px-3 py-2.5 text-sm text-[#20332e] focus:border-[#39785d] focus:outline-none focus:ring-2 focus:ring-[#39785d]/15"
+                                            ></textarea>
                                             <x-input-error :messages="$errors->get('experience.' . $index . '.description')" class="mt-1" />
                                         </div>
                                     </div>
 
                                     <!-- Botón de eliminar este registro específico -->
-                                    <div class="mt-3 text-right">
-                                        <x-danger-button type="button" wire:click="removeExperience({{ $index }})">
-                                            Eliminar
-                                        </x-danger-button>
+                                    <div class="flex justify-end">
+                                        <button type="button" wire:click="removeExperience({{ $index }})" class="rounded-md px-3 py-2 text-sm font-medium text-[#a64036] transition hover:bg-[#fbf3ed]">Eliminar experiencia</button>
                                     </div>
 
                                 </div>
@@ -245,21 +252,18 @@
 
                         <x-input-error :messages="$errors->get('experience')" class="mt-2" />
                     </div>
+                    </section>
 
-                    <div class="mb-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">
-                                Proyectos personales (opcional)
-                            </h3>
+                    <section class="grid gap-5 border-b border-[#dce4dd] pb-8">
+                    <div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                            <h2 class="font-display text-2xl text-[#20332e]">Proyectos personales <span class="font-sans text-sm font-normal text-[#7a8881]">(opcional)</span></h2>
 
-                            <!-- Botón para añadir un nuevo bloque de experiencia -->
-                            <x-secondary-button type="button" wire:click="addProject">
-                                + Añadir proyecto
-                            </x-secondary-button>
+                            <button type="button" wire:click="addProject" class="rounded-md border border-[#b9cbbf] px-3 py-2 text-sm font-semibold text-[#27634d] transition hover:bg-white">Añadir proyecto</button>
                         </div>
                         <!-- Recorremos los datos (vengan de la BD o sean nuevos) -->
                             @foreach ($projects as $index => $item)
-                                <div wire:key="projects-item-{{ $index }}" class="p-4 mb-4 border rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 relative">
+                                <div wire:key="projects-item-{{ $index }}" class="relative grid gap-4 rounded-md border border-[#dce4dd] bg-white p-4 sm:p-5">
 
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <!-- Nombre del proyecto -->
@@ -289,7 +293,7 @@
 
                                         <!-- Secondary URL -->
                                         <div>
-                                            <x-input-label for="secondary_url-{{ $index }}" value="Secondary URL" />
+                                            <x-input-label for="secondary_url-{{ $index }}" value="Enlace secundario" />
                                             <x-text-input
                                                 id="secondary_url-{{ $index }}"
                                                 type="url"
@@ -303,48 +307,44 @@
                                         <!-- Descripción -->
                                         <div>
                                             <x-input-label for="description-{{ $index }}" value="Descripción" />
-                                            <x-text-input
+                                            <textarea
                                                 id="description-{{ $index }}"
-                                                type="textarea"
                                                 wire:model="projects.{{ $index }}.description"
-                                                class="mt-1 block w-full"
-                                            />
+                                                rows="3"
+                                                class="mt-1 block w-full resize-y rounded-md border border-[#d4ded6] bg-white px-3 py-2.5 text-sm text-[#20332e] focus:border-[#39785d] focus:outline-none focus:ring-2 focus:ring-[#39785d]/15"
+                                            ></textarea>
                                             <x-input-error :messages="$errors->get('projects.' . $index . '.description')" class="mt-1" />
                                         </div>
                                     </div>
 
                                     <!-- Botón de eliminar este registro específico -->
-                                    <div class="mt-3 text-right">
-                                        <x-danger-button type="button" wire:click="removeProject({{ $index }})">
-                                            Eliminar
-                                        </x-danger-button>
+                                    <div class="flex justify-end">
+                                        <button type="button" wire:click="removeProject({{ $index }})" class="rounded-md px-3 py-2 text-sm font-medium text-[#a64036] transition hover:bg-[#fbf3ed]">Eliminar proyecto</button>
                                     </div>
 
                                 </div>
                             @endforeach
 
-                    {{-- Education --}}
-                    <div class="mb-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">
-                                Estudios
-                            </h3>
+                    </div>
+                    </section>
 
-                            <!-- Botón para añadir un nuevo bloque de experiencia -->
-                            <x-secondary-button type="button" wire:click="addEducation">
-                                + Añadir
-                            </x-secondary-button>
+                    <section class="grid gap-5 border-b border-[#dce4dd] pb-8">
+                    <div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                            <h2 class="font-display text-2xl text-[#20332e]">Formación académica</h2>
+
+                            <button type="button" wire:click="addEducation" class="rounded-md border border-[#b9cbbf] px-3 py-2 text-sm font-semibold text-[#27634d] transition hover:bg-white">Añadir estudios</button>
                         </div>
 
                         <!-- Si no hay nada en la experiencia (control con @ if por seguridad) -->
                         @if (empty($education))
-                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                            <p class="text-sm text-[#7a8881]">
                                 No has añadido ningún estudio
                             </p>
                         @else
                             <!-- Recorremos los datos (vengan de la BD o sean nuevos) -->
                             @foreach ($education as $index => $item)
-                                <div wire:key="education-item-{{ $index }}" class="p-4 mb-4 border rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700 relative">
+                                <div wire:key="education-item-{{ $index }}" class="relative grid gap-4 rounded-md border border-[#dce4dd] bg-white p-4 sm:p-5">
 
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <!-- Degree -->
@@ -372,14 +372,14 @@
                                         </div>
 
                                         <!-- Period -->
-                                        <div class="mt-3 flex items-center">
+                                        <div class="mt-3 flex items-center gap-2">
                                             <input
                                                 id="is_current-{{ $index }}"
                                                 type="checkbox"
                                                 wire:model.live="education.{{ $index }}.is_current"
-                                                class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                                                class="h-4 w-4 rounded border-[#b9cbbf] text-[#27634d] focus:ring-[#39785d]/30"
                                             >
-                                            <x-input-label for="is_current-{{ $index }}" value="Trabajo actualmente aquí" class="ml-2" />
+                                            <x-input-label for="is_current-{{ $index }}" value="Estudio actualmente" />
                                         </div>
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
                                             <!-- Fecha de Inicio -->
@@ -406,13 +406,12 @@
                                                     />
                                                     <x-input-error :messages="$errors->get('education.' . $index . '.end_date')" class="mt-1" />
                                                 @else
-                                                    <!-- Opcional: Un mensaje o campo deshabilitado indicando 'Actualidad' -->
                                                     <x-input-label value="Fecha de fin" />
                                                     <x-text-input
                                                         type="text"
                                                         value="Actualmente"
                                                         disabled
-                                                        class="mt-1 block w-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                                                        class="mt-1 block w-full cursor-not-allowed bg-[#f3f6f2] text-[#7a8881]"
                                                     />
                                                 @endif
                                             </div>
@@ -420,50 +419,50 @@
                                     </div>
 
                                     <!-- Botón de eliminar este registro específico -->
-                                    <div class="mt-3 text-right">
-                                        <x-danger-button type="button" wire:click="removeExperience({{ $index }})">
-                                            Eliminar
-                                        </x-danger-button>
+                                    <div class="flex justify-end">
+                                        <button type="button" wire:click="removeEducation({{ $index }})" class="rounded-md px-3 py-2 text-sm font-medium text-[#a64036] transition hover:bg-[#fbf3ed]">Eliminar estudios</button>
                                     </div>
 
                                 </div>
                             @endforeach
                         @endif
 
-                        <x-input-error :messages="$errors->get('experience')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('education')" class="mt-2" />
                     </div>
+                    </section>
 
                     {{-- <div>
                         <x-input-label for="soft_skills" value="Habilidades personales (opcional)" />
                         <x-text-input wire:model="soft_skills" id="soft_skills" type="text" class="mt-1 block w-full" />
                     </div> --}}
 
-                    <div class="mt-6 p-4 bg-white border rounded-lg shadow-sm">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-bold text-gray-800">Idiomas</h3>
+                    <section class="grid gap-5 border-b border-[#dce4dd] pb-8">
+                    <div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                            <h2 class="font-display text-2xl text-[#20332e]">Idiomas</h2>
                             <button type="button"
                                     wire:click="addLanguage"
-                                    class="px-3 py-1 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700">
-                                + Añadir idioma
+                                    class="rounded-md border border-[#b9cbbf] px-3 py-2 text-sm font-semibold text-[#27634d] transition hover:bg-white">
+                                Añadir idioma
                             </button>
                         </div>
 
-                        <div class="space-y-3">
+                        <div class="grid gap-3">
                             @foreach($languages as $index => $language)
-                                <div wire:key="language-{{ $index }}" class="flex items-center gap-3">
+                                <div wire:key="language-{{ $index }}" class="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] items-center gap-3">
 
                                     <!-- Nombre del idioma -->
                                     <div class="flex-1">
                                         <input type="text"
                                             wire:model="languages.{{ $index }}.name"
                                             placeholder="Ej: Español, Inglés, Catalán..."
-                                            class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                                            class="w-full rounded-md text-sm">
                                     </div>
 
                                     <!-- Desplegable de nivel -->
-                                    <div class="w-1/3">
+                                    <div class="min-w-0">
                                         <select wire:model="languages.{{ $index }}.level"
-                                                class="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                                                class="w-full rounded-md text-sm">
                                             @foreach($languageLevels as $level)
                                                 <option value="{{ $level }}">{{ $level }}</option>
                                             @endforeach
@@ -473,7 +472,7 @@
                                     <!-- Botón eliminar -->
                                     <button type="button"
                                             wire:click="removeLanguage({{ $index }})"
-                                            class="text-red-500 hover:text-red-700 p-1 font-bold text-lg"
+                                            class="flex h-9 w-9 items-center justify-center rounded-md text-[#a64036] transition hover:bg-[#fbf3ed]"
                                             title="Eliminar idioma">
                                         &times;
                                     </button>
@@ -481,10 +480,15 @@
                             @endforeach
                         </div>
                     </div>
+                    </section>
 
-                    <x-primary-button>Guardar perfil</x-primary-button>
+                    <div class="flex flex-wrap items-center gap-4 pb-4">
+                        <button type="submit" wire:loading.attr="disabled" wire:target="save" class="inline-flex min-w-44 items-center justify-center rounded-md bg-[#27634d] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#1e513d] focus:outline-none focus:ring-2 focus:ring-[#39785d] focus:ring-offset-2 disabled:cursor-wait disabled:opacity-70">
+                            <span wire:loading.remove wire:target="save">Guardar perfil</span>
+                            <span wire:loading wire:target="save">Guardando...</span>
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
-    </div>
 </div>

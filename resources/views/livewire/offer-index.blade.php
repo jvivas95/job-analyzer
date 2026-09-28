@@ -1,71 +1,58 @@
-<div wire:poll.5s="$refresh" class="min-h-screen bg-[#0a1111] px-4 py-8 sm:px-6 lg:px-8">
+<div wire:poll.5s="$refresh" class="min-h-[calc(100vh-4rem)] bg-[#f3f6f2] px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
     <div class="mx-auto max-w-7xl">
-        <div class="mb-8 overflow-hidden rounded-[28px] border border-[#24463f] bg-[#0d1716] shadow-[0_0_0_1px_rgba(88,166,146,0.12),0_20px_40px_rgba(10,18,17,0.7)]">
-            <div class="border-b border-[#24463f] bg-[radial-gradient(circle_at_top_left,_rgba(95,201,169,0.16),_transparent_34%)] p-6 sm:p-8">
-                <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-                    <div>
-                        <p class="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#8fe7c3]">dashboard</p>
-                        <h1 class="mt-3 text-3xl font-bold tracking-tight text-[#edf8f4] sm:text-4xl">Mis ofertas</h1>
-                    </div>
-
-                    <a href="{{ route('offers.create') }}"
-                       class="inline-flex items-center justify-center rounded-xl border border-[#325f57] bg-[#143932] px-5 py-3 text-sm font-semibold text-[#ebfff8] transition hover:border-[#4a8a7b] hover:bg-[#1a4a41]">
-                        + Nueva oferta
-                    </a>
-                </div>
+        <header class="mb-8 flex flex-col gap-5 border-b border-[#dce4dd] pb-6 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.16em] text-[#a65b3e]">Tu búsqueda</p>
+                <h1 class="mt-2 font-display text-4xl leading-tight text-[#20332e]">Mis ofertas</h1>
+                <p class="mt-2 text-sm text-[#65746d]">Revisa tus oportunidades y el estado de cada análisis.</p>
             </div>
-        </div>
+
+            <a href="{{ route('offers.create') }}" wire:navigate class="inline-flex items-center justify-center gap-2 rounded-md bg-[#27634d] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#1e513d] focus:outline-none focus:ring-2 focus:ring-[#39785d] focus:ring-offset-2">
+                <span aria-hidden="true" class="text-lg leading-none">+</span>
+                Nueva oferta
+            </a>
+        </header>
 
         @if($offers->isEmpty())
-            <div class="rounded-[28px] border border-dashed border-[#2a4a46] bg-[#0d1716] p-10 text-center shadow-[inset_0_0_18px_rgba(143,231,195,0.04)]">
-                <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-[#325f57] bg-[#123a34] text-2xl text-[#9feac8]">✦</div>
-                <h2 class="mt-5 text-xl font-semibold text-[#edf8f4]">Todavía no tienes ofertas</h2>
-                <p class="mt-2 text-sm text-[#a7b8b3]">Añade tu primera oferta para empezar a analizar tu fit profesional.</p>
+            <div class="border-b border-[#dce4dd] py-16 text-center">
+                <span class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-[#f6e8dc] text-xl text-[#a65b3e]" aria-hidden="true">+</span>
+                <h2 class="mt-5 font-display text-2xl text-[#20332e]">Todavía no tienes ofertas</h2>
+                <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-[#65746d]">Añade una oportunidad para comparar sus requisitos con tu experiencia y preparar tu candidatura.</p>
+                <a href="{{ route('offers.create') }}" wire:navigate class="mt-6 inline-flex rounded-md border border-[#b9cbbf] px-4 py-2.5 text-sm font-semibold text-[#27634d] transition hover:bg-white">Analizar primera oferta</a>
             </div>
         @else
-            <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+            <div class="divide-y divide-[#dce4dd] border-y border-[#dce4dd]">
                 @foreach($offers as $offer)
                     @php
                         $badgeColor = match(true) {
-                            $offer->status === 'failed' => 'bg-[#391d1f] text-[#f7b8bf] border border-[#5a2c31]',
-                            $offer->status === 'pending', $offer->status === 'processing' => 'bg-[#141f1d] text-[#dfeae7] border border-[#2b3937]',
-                            $offer->isHighFit() => 'bg-[#17372d] text-[#a8f0c8] border border-[#2d5a4d]',
-                            default => 'bg-[#2b2317] text-[#f3d290] border border-[#4a3a22]',
+                            $offer->status === 'failed' => 'bg-[#fbe9e6] text-[#9b3f34]',
+                            $offer->status === 'pending', $offer->status === 'processing' => 'bg-[#edf0ee] text-[#53675f]',
+                            $offer->isHighFit() => 'bg-[#e5f2e8] text-[#27634d]',
+                            default => 'bg-[#f8eee4] text-[#9b5a31]',
                         };
 
-                        $scoreLabel = $offer->status === 'processed' ? $offer->fit_score . '%' : ucfirst($offer->status);
+                        $statusLabel = match($offer->status) {
+                            'pending' => 'Pendiente',
+                            'processing' => 'En análisis',
+                            'processed' => 'Analizada',
+                            'failed' => 'Error',
+                            default => ucfirst($offer->status),
+                        };
+
+                        $scoreLabel = $offer->status === 'processed' ? $offer->fit_score . '% de afinidad' : $statusLabel;
                     @endphp
 
-                    <a href="{{ route('offers.show', $offer) }}"
-                       class="group block rounded-[26px] border border-[#223d39] bg-[#0d1716] p-5 shadow-[0_0_0_1px_rgba(136,194,177,0.08),0_18px_32px_rgba(7,12,11,0.75)] transition duration-200 hover:-translate-y-1 hover:border-[#3a5c55] hover:bg-[#101d1b]">
-                        <div class="flex items-start justify-between gap-3">
-                            <div class="min-w-0">
-                                <p class="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#7f9a96]">Oferta</p>
-                                <h3 class="mt-2 truncate text-lg font-semibold text-[#edf8f4]">{{ $offer->company ?? 'Sin empresa' }}</h3>
-                            </div>
-
-                            <span class="inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] {{ $badgeColor }}">
-                                {{ $scoreLabel }}
-                            </span>
+                    <a href="{{ route('offers.show', $offer) }}" wire:navigate class="group grid gap-3 py-5 transition hover:bg-white/70 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:px-4">
+                        <div class="min-w-0">
+                            <p class="truncate text-sm font-semibold text-[#20332e] group-hover:text-[#27634d]">{{ $offer->title ?? 'Puesto sin título' }}</p>
+                            <p class="mt-1 truncate text-sm text-[#65746d]">{{ $offer->company ?? 'Empresa sin especificar' }}</p>
                         </div>
 
-                        <div class="mt-5 rounded-2xl border border-[#213b37] bg-[#0a1413] p-4">
-                            <p class="text-sm text-[#dfeae7]">{{ $offer->title ?? 'Sin título' }}</p>
+                        <div class="flex flex-wrap items-center gap-3 sm:justify-end">
+                            <span class="text-xs text-[#7a8881]">{{ $offer->created_at?->format('d/m/Y') }}</span>
+                            <span class="inline-flex rounded-md px-2.5 py-1.5 text-xs font-semibold {{ $badgeColor }}">{{ $scoreLabel }}</span>
+                            <span aria-hidden="true" class="hidden text-lg text-[#9aa69f] transition group-hover:translate-x-0.5 group-hover:text-[#27634d] sm:inline">→</span>
                         </div>
-
-                        <div class="mt-5 flex items-center justify-between text-sm text-[#9aa9a4]">
-                            <span class="uppercase tracking-[0.18em] text-[#7f9a96]">Estado</span>
-                            <span class="font-medium text-[#edf8f4]">{{ ucfirst($offer->status) }}</span>
-                        </div>
-
-                        @if($offer->status === 'processed' && $offer->fit_score !== null)
-                            <div class="mt-3 flex items-center justify-between text-sm text-[#9aa9a4]">
-                                <span class="uppercase tracking-[0.18em] text-[#7f9a96]">Match</span>
-                                <span class="font-semibold {{ $offer->isHighFit() ? 'text-[#a8f0c8]' : 'text-[#f3d290]' }}">
-                                    {{ $offer->fit_score }}%
-                                </span>
-                            </div>
-                        @endif
                     </a>
                 @endforeach
             </div>
