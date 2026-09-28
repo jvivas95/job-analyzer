@@ -1,25 +1,22 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleAuthController;
-
-use App\Livewire\OfferIndex;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\JobOfferPdfController;
 use App\Livewire\OfferCreate;
+use App\Livewire\OfferIndex;
 use App\Livewire\OfferShow;
 use App\Livewire\ProfileEdit;
-
-use App\Http\Controllers\JobOfferPdfController;
-
-
+use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', 'dashboard');
 
 Route::get('/auth/google', [GoogleAuthController::class, 'redirectGoogle'])->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callbackGoogle'])->name('google.callback');
 
-Route::middleware(['auth'])->group(function(){
+Route::middleware(['auth'])->group(function () {
 
-    Route::view('dashboard', 'dashboard')
+    Route::get('dashboard', DashboardController::class)
         ->middleware(['verified'])
         ->name('dashboard');
 
